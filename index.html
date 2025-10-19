@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C Algorithm Code Vault</title>
+    <title>C Algorithm Code Vault (Static)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400&display=swap');
@@ -36,10 +36,10 @@
 <body class="min-h-screen p-4 md:p-8">
 
     <div id="app" class="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl p-6 md:p-10">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-700 mb-2">C Algorithm Vault</h1>
-        <p class="text-gray-600 mb-6 border-b pb-4">Your persistently stored C code snippets, accessible anywhere.</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-700 mb-2">C Algorithm Vault (Static)</h1>
+        <p class="text-gray-600 mb-6 border-b pb-4">All code is stored locally within this single HTML file. Ready for GitHub Pages.</p>
 
-        <!-- Loading/Status Indicator -->
+        <!-- Loading/Status Indicator - Simplified for static content -->
         <div id="status-message" class="flex items-center justify-center p-4 bg-yellow-100 text-yellow-800 rounded-lg hidden">
             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -80,29 +80,11 @@
         </div>
     </div>
 
-    <!-- Firebase Imports -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <script>
         
-        // --- Global Firebase and Application Variables ---
-        // Setting Firebase log level for debugging
-        setLogLevel('Debug');
-        
-        let app;
-        let db;
-        let auth;
-        let userId = 'anonymous'; // Default ID until authenticated
-        
-        // Global state for application data
+        // --- Global Application Variables ---
         let snippets = [];
         let currentSnippet = null;
-        
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         // --- DOM Elements ---
         const statusMessageEl = document.getElementById('status-message');
@@ -114,7 +96,7 @@
         const detailCodeEl = document.getElementById('detail-code');
         const copyButton = document.getElementById('copy-button');
 
-        // Initial Data to Seed the Firestore Database
+        // Initial Data now stored locally in the JS scope
         const initialSnippets = [
             { id: 1, title: "1. INSERTION SORT (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n\nvoid main()\n{\n    int n, i, j, key;\n    int arr[100]; /* fixed size array (Turbo C doesn't allow int arr[n]) */\n\n    clrscr(); /* clear screen */\n    printf("Enter number of elements: ");\n    scanf("%d", &n);\n\n    printf("Enter %d elements: ", n);\n    for (i = 0; i < n; i++)\n    {\n        scanf("%d", &arr[i]);\n    }\n\n    /* Insertion Sort */\n    for (i = 1; i < n; i++)\n    {\n        key = arr[i];\n        j = i - 1;\n\n        while (j >= 0 && arr[j] > key)\n        {\n            arr[j + 1] = arr[j];\n            j = j - 1;\n        }\n        arr[j + 1] = key;\n    }\n\n    /* Print sorted array */\n    printf("\\nSorted array: ");\n    for (i = 0; i < n; i++)\n    {\n        printf("%d", arr[i]);\n    }\n\n    getch(); /* wait for key press before closing */\n}` },
             { id: 2, title: "2. QUICK SORT (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n\nvoid swap(int *a, int *b)\n{\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nint partition(int arr[], int low, int high)\n{\n    int pivot = arr[high];\n    int i = low - 1;\n    int j;\n\n    for (j = low; j < high; j++)\n    {\n        if (arr[j] < pivot)\n        {\n            i++;\n            swap(&arr[i], &arr[j]);\n        }\n    }\n\n    swap(&arr[i + 1], &arr[high]);\n    return (i + 1);\n}\n\nvoid quickSort(int arr[], int low, int high)\n{\n    int pi;\n    if (low < high)\n    {\n        pi = partition(arr, low, high);\n        quickSort(arr, low, pi - 1);\n        quickSort(arr, pi + 1, high);\n    }\n}\n\nvoid main()\n{\n    int arr[50];\n    int n, i;\n\n    clrscr(); // Clears the Turbo C screen\n    printf("Enter number of elements: ");\n    scanf("%d", &n);\n\n    printf("Enter %d elements: \\n", n);\n    for (i = 0; i < n; i++)\n        scanf("%d", &arr[i]);\n\n    quickSort(arr, 0, n - 1);\n\n    printf("\\nSorted array: ");\n    for (i = 0; i < n; i++)\n        printf("%d", arr[i]);\n\n    getch(); // Waits for key press before closing output screen\n}` },
@@ -143,88 +125,19 @@
         // --- Core Application Logic ---
 
         /**
-         * Checks if the initial code snippets have been seeded and seeds them if not.
+         * Initializes and renders the snippet data directly from the local array.
          */
-        async function seedInitialData() {
-            // FIX: Corrected the collection path to be 5 segments long (odd number of segments)
-            const SNIPPETS_COLLECTION_PATH = `artifacts/${appId}/users/${userId}/snippets`;
-            // Placing metadata document inside the snippets collection under a reserved ID
-            const vaultRef = doc(db, SNIPPETS_COLLECTION_PATH, 'VAULT_METADATA'); 
-
-            try {
-                const docSnap = await getDoc(vaultRef);
-
-                if (!docSnap.exists() || !docSnap.data().isSeeded) {
-                    updateStatus('First run detected. Populating vault with your code...');
-                    const batchWrites = [];
-                    const snippetsCollectionRef = collection(db, SNIPPETS_COLLECTION_PATH);
-
-                    // Prepare all snippets for writing
-                    for (const snippet of initialSnippets) {
-                        // Use stringified ID as document ID for consistency
-                        const snippetDocRef = doc(snippetsCollectionRef, String(snippet.id));
-                        batchWrites.push(setDoc(snippetDocRef, snippet));
-                    }
-
-                    // Write the metadata flag last
-                    batchWrites.push(setDoc(vaultRef, { isSeeded: true }));
-
-                    await Promise.all(batchWrites);
-                    updateStatus('Vault successfully populated!', false);
-                    setTimeout(hideStatus, 3000);
-
-                } else {
-                    hideStatus();
-                }
-            } catch (error) {
-                console.error("Error seeding data:", error);
-                // Propagate the error message if seeding fails
-                updateStatus("Failed to load or seed vault data. Check console for details.", true);
-            }
-        }
-
-        /**
-         * Sets up the real-time listener for code snippets.
-         */
-        function setupDataListener() {
-            if (!db || !userId) {
-                updateStatus('Database connection not ready.', true);
-                return;
-            }
+        function initializeStaticData() {
+            updateStatus('Loading static code snippets...');
             
-            // FIX: Corrected the collection path to be 5 segments long (odd number of segments)
-            const SNIPPETS_COLLECTION_PATH = `artifacts/${appId}/users/${userId}/snippets`;
-            const q = collection(db, SNIPPETS_COLLECTION_PATH);
+            // Set global snippets array and sort it
+            snippets = initialSnippets;
+            snippets.sort((a, b) => a.id - b.id);
             
-            // Note: Since Firestore requires composite indexes for orderBy on fields other than ID/timestamp, 
-            // and we rely on the internal order for ID, we fetch all and sort locally.
+            renderSnippetList();
             
-            onSnapshot(q, (snapshot) => {
-                snippets = [];
-                snapshot.forEach((doc) => {
-                    // Check if the document is the metadata document before pushing to snippets array
-                    if (doc.id !== 'VAULT_METADATA') { 
-                        snippets.push(doc.data());
-                    }
-                });
-
-                // Sort locally by ID since the IDs were sequential from the original document.
-                snippets.sort((a, b) => a.id - b.id);
-                
-                renderSnippetList();
-                if (currentSnippet) {
-                    const updatedSnippet = snippets.find(s => s.id === currentSnippet.id);
-                    if (updatedSnippet) {
-                        currentSnippet = updatedSnippet;
-                        renderDetailView();
-                    }
-                }
-                
-                hideStatus();
-            }, (error) => {
-                console.error("Error fetching snippets:", error);
-                updateStatus("Real-time connection failed. Check console.", true);
-            });
+            updateStatus('Code vault loaded successfully.', false);
+            setTimeout(hideStatus, 1500);
         }
 
 
@@ -303,48 +216,8 @@
             }
         }
 
-        // --- Initialization ---
-
-        async function initializeAppAndAuth() {
-            updateStatus('Initializing Firebase and authenticating...');
-            if (!firebaseConfig) {
-                console.error("Firebase config is missing.");
-                updateStatus("Initialization failed: Firebase config missing.", true);
-                return;
-            }
-
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        console.log("Authenticated with UID:", userId);
-                        seedInitialData().then(setupDataListener);
-                    } else {
-                        // This should ideally not happen in the Canvas environment but is a fallback
-                        updateStatus("Authentication failed. Using anonymous mode.", true);
-                        userId = crypto.randomUUID(); 
-                        seedInitialData().then(setupDataListener);
-                    }
-                });
-
-            } catch (error) {
-                console.error("Initialization Error:", error);
-                updateStatus(`Critical error during initialization: ${error.message}`, true);
-            }
-        }
-
-        // Start the application setup
-        initializeAppAndAuth();
+        // Start the application setup when the window loads
+        window.onload = initializeStaticData;
     </script>
 </body>
 </html>
