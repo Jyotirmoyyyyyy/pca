@@ -3,255 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C Algorithm Code Vault (Static)</title>
+    <title>Linked List and Data Structure C Code Repository</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+                    },
+                    colors: {
+                        'primary-blue': '#2563eb', // Vibrant Blue
+                        'secondary-gray': '#e5e7eb', // Light body background
+                        'code-bg': '#f7f9fc', // Very Light Code Background (for readability)
+                        'code-text': '#1f2937', // Dark Code Text
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400&display=swap');
-        
-        /* --- GLOBAL & DARK THEME --- */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a2e; /* Deep blue/purple dark background */
-            color: #e0e0f0;
-        }
-
-        /* --- RGB BORDER EFFECT --- */
-        @keyframes pulse-border {
-            0% { border-color: #ff0077; box-shadow: 0 0 10px #ff0077; } /* Pink/Red */
-            33% { border-color: #00ffc8; box-shadow: 0 0 10px #00ffc8; } /* Cyan/Green */
-            66% { border-color: #7700ff; box-shadow: 0 0 10px #7700ff; } /* Purple/Blue */
-            100% { border-color: #ff0077; box-shadow: 0 0 10px #ff0077; }
-        }
-
-        .rgb-card {
-            background-color: #24243e; /* Slightly lighter dark card background */
-            border: 2px solid;
-            animation: pulse-border 10s infinite alternate;
+        /* Shared Styles */
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
-
-        /* --- CODE BLOCK STYLING (High Contrast) --- */
         .code-container {
-            font-family: 'Fira Code', monospace;
+            border: 1px solid #d1d5db;
+            background-color: var(--code-bg);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        pre {
             white-space: pre-wrap;
             word-wrap: break-word;
-            max-height: 70vh;
-            overflow-y: auto;
-            background-color: #0d0d1a; /* Even darker, almost black background for code */
-            color: #00ffc8; /* Neon cyan code text */
-            padding: 1.5rem;
-            border-radius: 0.75rem;
             line-height: 1.4;
-            font-size: 0.9rem;
-            border: 1px solid #7700ff; /* Purple accent border */
+            font-size: 0.95rem; 
         }
-        .code-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        .code-container::-webkit-scrollbar-thumb {
-            background-color: #ff0077; /* Pink scrollbar */
-            border-radius: 4px;
-        }
+        .code-block::-webkit-scrollbar { height: 8px; }
+        .code-block::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 4px; }
+        .code-block::-webkit-scrollbar-track { background-color: #f3f4f6; }
 
-        /* --- SNIPPET LIST ITEMS --- */
-        .snippet-item {
-            background-color: #313155; /* List item background */
-            transition: background-color 0.2s, transform 0.2s;
-            border-left: 5px solid #00ffc8;
-        }
-        .snippet-item:hover {
-            background-color: #434372;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 255, 200, 0.2);
+        /* Detail View Specific Style */
+        #code-detail {
+            max-width: 800px;
+            margin: 0 auto;
         }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="bg-secondary-gray min-h-screen">
 
-    <div id="app" class="max-w-4xl mx-auto rounded-xl shadow-2xl p-6 md:p-10 rgb-card">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-[#00ffc8] mb-2 drop-shadow-lg">C Algorithm Vault <span class="text-[#ff0077]">(Static)</span></h1>
-        <p class="text-gray-400 mb-6 border-b border-gray-600 pb-4">All code by JYOTIRMOY is stored now and Ready to Use</p>
+    <div id="app" class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <header class="text-center mb-12 p-6 bg-white rounded-xl shadow-lg border-b-4 border-primary-blue">
+            <h1 class="text-4xl font-extrabold text-gray-800 sm:text-5xl">
+                Data Structures C Code Repository
+            </h1>
+            <p class="mt-4 text-xl text-gray-600">
+                Linked Lists, Stacks, and Queues - Accessible Anywhere
+            </p>
+        </header>
 
-        <!-- Loading/Status Indicator - Simplified for static content -->
-        <div id="status-message" class="flex items-center justify-center p-4 bg-[#7700ff]/20 text-gray-200 rounded-lg hidden">
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-[#ff0077]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span id="status-text">Loading application...</span>
+        <!-- Main Code List View -->
+        <div id="code-list-view" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Code titles are rendered here -->
         </div>
 
-        <!-- Main Content Area -->
-        <div id="content-area">
-            <!-- Snippet List View -->
-            <div id="snippet-list-view">
-                <h2 class="text-2xl font-semibold text-[#00ffc8] mb-4">Available Algorithms</h2>
-                <div id="snippets-container" class="space-y-3">
-                    <!-- Snippets will be injected here -->
+        <!-- Code Detail View -->
+        <div id="code-detail-view" class="hidden">
+            <button id="back-button" class="flex items-center text-primary-blue hover:text-blue-700 font-semibold mb-6 transition-colors">
+                <!-- Icon from lucide-react equivalent: ChevronLeft -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-1"><path d="m15 18-6-6 6-6"/></svg>
+                Back to All Codes
+            </button>
+            <div id="code-detail" class="card p-6">
+                <h2 id="detail-title" class="text-3xl font-bold text-gray-800 mb-2"></h2>
+                <p id="detail-filename" class="text-sm text-gray-500 mb-6"></p>
+                <div id="detail-code-container" class="code-container">
+                    <pre id="detail-code" class="text-base text-code-text overflow-x-auto code-block font-mono"></pre>
                 </div>
-            </div>
-
-            <!-- Snippet Detail View -->
-            <div id="snippet-detail-view" class="hidden">
-                <button onclick="goBack()" class="flex items-center text-[#ff0077] hover:text-[#00ffc8] mb-4 font-medium transition duration-150">
-                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Back to List
+                <button id="detail-copy-button" class="mt-6 px-6 py-2 bg-primary-blue text-white text-base font-medium rounded-lg shadow-md hover:bg-primary-blue/80 transition-colors duration-200">
+                    Copy Code
                 </button>
-                <h2 id="detail-title" class="text-2xl font-bold text-[#00ffc8] mb-4"></h2>
-                
-                <div class="flex justify-end mb-2">
-                    <button id="copy-button" onclick="copyCode()" class="px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-200 flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2m-6 0h6m-6 0h-2"></path></svg>
-                        Copy Code
-                    </button>
-                </div>
-
-                <div id="detail-code" class="code-container">
-                    <!-- Code content goes here -->
-                </div>
             </div>
         </div>
+
+        <footer class="mt-16 text-center text-gray-500 text-sm">
+            <p>&copy; 2024 C Code Repository. All codes extracted from provided files.</p>
+        </footer>
     </div>
 
-    <script>
-        
-        // --- Global Application Variables ---
-        let snippets = [];
-        let currentSnippet = null;
+    <!-- Firebase Initialization Script (for persistent access) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- DOM Elements ---
-        const statusMessageEl = document.getElementById('status-message');
-        const statusTextEl = document.getElementById('status-text');
-        const snippetsContainerEl = document.getElementById('snippets-container');
-        const listEl = document.getElementById('snippet-list-view');
-        const detailEl = document.getElementById('snippet-detail-view');
-        const detailTitleEl = document.getElementById('detail-title');
-        const detailCodeEl = document.getElementById('detail-code');
-        const copyButton = document.getElementById('copy-button');
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-        // Initial Data now stored locally in the JS scope
-        const initialSnippets = [
-            { id: 1, title: "1. INSERTION SORT (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n\nvoid main()\n{\n    int n, i, j, key;\n    int arr[100]; /* fixed size array (Turbo C doesn't allow int arr[n]) */\n\n    clrscr(); /* clear screen */\n    printf("Enter number of elements: ");\n    scanf("%d", &n);\n\n    printf("Enter %d elements: ", n);\n    for (i = 0; i < n; i++)\n    {\n        scanf("%d", &arr[i]);\n    }\n\n    /* Insertion Sort */\n    for (i = 1; i < n; i++)\n    {\n        key = arr[i];\n        j = i - 1;\n\n        while (j >= 0 && arr[j] > key)\n        {\n            arr[j + 1] = arr[j];\n            j = j - 1;\n        }\n        arr[j + 1] = key;\n    }\n\n    /* Print sorted array */\n    printf("\\nSorted array: ");\n    for (i = 0; i < n; i++)\n    {\n        printf("%d", arr[i]);\n    }\n\n    getch(); /* wait for key press before closing */\n}` },
-            { id: 2, title: "2. QUICK SORT (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n\nvoid swap(int *a, int *b)\n{\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nint partition(int arr[], int low, int high)\n{\n    int pivot = arr[high];\n    int i = low - 1;\n    int j;\n\n    for (j = low; j < high; j++)\n    {\n        if (arr[j] < pivot)\n        {\n            i++;\n            swap(&arr[i], &arr[j]);\n        }\n    }\n\n    swap(&arr[i + 1], &arr[high]);\n    return (i + 1);\n}\n\nvoid quickSort(int arr[], int low, int high)\n{\n    int pi;\n    if (low < high)\n    {\n        pi = partition(arr, low, high);\n        quickSort(arr, low, pi - 1);\n        quickSort(arr, pi + 1, high);\n    }\n}\n\nvoid main()\n{\n    int arr[50];\n    int n, i;\n\n    clrscr(); // Clears the Turbo C screen\n    printf("Enter number of elements: ");\n    scanf("%d", &n);\n\n    printf("Enter %d elements: \\n", n);\n    for (i = 0; i < n; i++)\n        scanf("%d", &arr[i]);\n\n    quickSort(arr, 0, n - 1);\n\n    printf("\\nSorted array: ");\n    for (i = 0; i < n; i++)\n        printf("%d", arr[i]);\n\n    getch(); // Waits for key press before closing output screen\n}` },
-            { id: 3, title: "3. ITERATIVE BINARY SEARCH (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n\nint binarySearch(int arr[], int n, int key) {\n    int low = 0, high = n - 1, mid;\n\n    while (low <= high) {\n        mid = (low + high) / 2;\n\n        if (arr[mid] == key)\n            return mid; // Element found\n        else if (arr[mid] < key)\n            low = mid + 1; // Search right half\n        else\n            high = mid - 1; // Search left half\n    }\n\n    return -1; // Element not found\n}\n\nint main() {\n    int n, key, i, result;\n    int arr[100]; // fixed-size array for Turbo C\n\n    clrscr();\n\n    printf("Enter number of elements: ");\n    scanf("%d", &n);\n\n    printf("Enter %d sorted elements: ", n);\n    for (i = 0; i < n; i++)\n        scanf("%d", &arr[i]);\n\n    printf("Enter element to search: ");\n    scanf("%d", &key);\n\n    result = binarySearch(arr, n, key);\n\n    if (result == -1)\n        printf("Element not found.\\n");\n    else\n        printf("Element found at position %d.\\n", result + 1);\n\n    getch();\n    return 0;\n}` },
-            { id: 4, title: "4. RECURSIVE BINARY SEARCH (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n\nint binarySearch(int arr[], int low, int high, int key) {\n    int mid;\n\n    if (low > high)\n        return -1; // Base case: not found\n\n    mid = (low + high) / 2;\n\n    if (arr[mid] == key)\n        return mid; // Element found\n    else if (arr[mid] > key)\n        return binarySearch(arr, low, mid - 1, key); // Left half\n    else\n        return binarySearch(arr, mid + 1, high, key); // Right half\n}\n\nint main() {\n    int n, key, i, result;\n    int arr[100]; // Fixed-size array for Turbo C\n\n    clrscr();\n\n    printf("Enter number of elements: ");\n    scanf("%d", &n);\n\n    printf("Enter %d sorted elements: ", n);\n    for (i = 0; i < n; i++)\n        scanf("%d", &arr[i]);\n\n    printf("Enter element to search: ");\n    scanf("%d", &key);\n\n    result = binarySearch(arr, 0, n - 1, key);\n\n    if (result == -1)\n        printf("Element not found.\\n");\n    else\n        printf("Element found at position %d\\n", result + 1);\n\n    getch();\n    return 0;\n}` },
-            { id: 5, title: "5. REVERSE SINGLE LIST (Static Data) (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n#include <stdlib.h>\n\n// Define the node structure\nstruct Node {\n    int data;\n    struct Node* next;\n};\n\n// Function to reverse the linked list\nstruct Node* reverseList(struct Node* head) {\n    struct Node* prev = NULL;\n    struct Node* current = head;\n    struct Node* next = NULL;\n\n    while (current != NULL) {\n        next = current->next;     // Store next node\n        current->next = prev;     // Reverse current node's pointer\n        prev = current;           // Move prev one step forward\n        current = next;           // Move current one step forward\n    }\n\n    return prev; // New head of the reversed list\n}\n\n// Function to print the linked list\nvoid printList(struct Node* head) {\n    struct Node* temp = head;\n\n    while (temp != NULL) {\n        printf("%d -> ", temp->data);\n        temp = temp->next;\n    }\n    printf("NULL\\n");\n}\n\n// Function to create a new node\nstruct Node* createNode(int data) {\n    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));\n    if (newNode == NULL) {\n        printf("Memory not allocated.\\n");\n        getch();\n        exit(0);\n    }\n    newNode->data = data;\n    newNode->next = NULL;\n    return newNode;\n}\n\nint main() {\n    clrscr(); // Clear screen in Turbo C\n\n    // Creating a sample linked list: 1 -> 2 -> 3 -> 4 -> NULL\n    struct Node* head = createNode(1);\n    head->next = createNode(2);\n    head->next->next = createNode(3);\n    head->next->next->next = createNode(4);\n\n    printf("Original List:\\n");\n    printList(head);\n\n    head = reverseList(head);\n\n    printf("Reversed List:\\n");\n    printList(head);\n\n    getch(); // Wait for key press\n    return 0;\n}` },
-            { id: 6, title: "6. REVERSE SINGLE LIST (User Input) (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n#include <stdlib.h>\n\n// Define the node structure\nstruct Node {\n    int data;\n    struct Node* next;\n};\n\n// Function to reverse the linked list\nstruct Node* reverseList(struct Node* head) {\n    struct Node* prev = NULL;\n    struct Node* current = head;\n    struct Node* next = NULL;\n\n    while (current != NULL) {\n        next = current->next;     // Store next node\n        current->next = prev;     // Reverse current node's pointer\n        prev = current;           // Move prev one step forward\n        current = next;           // Move current one step forward\n    }\n\n    return prev; // New head of the reversed list\n}\n\n// Function to print the linked list\nvoid printList(struct Node* head) {\n    struct Node* temp = head;\n\n    while (temp != NULL) {\n        printf("%d -> ", temp->data);\n        temp = temp->next;\n    }\n    printf("NULL\\n");\n}\n\n// Function to create a new node\nstruct Node* createNode(int data) {\n    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));\n    if (!newNode) {\n        printf("Memory allocation failed\\n");\n        getch();\n        exit(1);\n    }\n    newNode->data = data;\n    newNode->next = NULL;\n    return newNode;\n}\n\nint main() {\n    clrscr(); // Clear screen in Turbo C\n\n    int n, i, value;\n    struct Node* head = NULL;\n    struct Node* tail = NULL;\n\n    printf("Enter the number of nodes: ");\n    scanf("%d", &n);\n\n    for (i = 0; i < n; i++)\n    {\n        printf("Enter value for node %d: ", i + 1);\n        scanf("%d", &value);\n\n        struct Node* newNode = createNode (value);\n\n        if (head == NULL) {\n            head = newNode; // First node\n            tail = newNode;\n        } else {\n            tail->next = newNode; // Append to the list\n            tail = newNode;\n        }\n    }\n\n    printf("\\nOriginal List:\\n");\n    printList(head);\n\n    head = reverseList(head);\n\n    printf("\\nReversed List:\\n");\n    printList(head);\n\n    // Free memory\n    struct Node* temp;\n    while (head != NULL) {\n        temp = head;\n        head = head->next;\n        free(temp);\n    }\n\n    getch(); // Wait for key press\n    return 0;\n}` },
-            { id: 7, title: "7. MERGING OF TWO SORTED LISTS (Static Data) (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node* next;\n};\n\nstruct Node* createNode(int data) {\n    struct Node* n;\n    n = (struct Node*)malloc(sizeof(struct Node));\n    n->data = data;\n    n->next = NULL;\n    return n;\n}\n\nstruct Node* merge (struct Node* a, struct Node* b) {\n    if (a == NULL) return b;\n    if (b == NULL) return a;\n\n    struct Node* head;\n    if (a->data < b->data) {\n        head = a;\n        a = a->next;\n    } else {\n        head = b;\n        b = b->next;\n    }\n\n    struct Node* tail = head;\n\n    while (a != NULL && b != NULL) {\n        if (a->data < b->data) {\n            tail->next = a;\n            tail = a;\n            a = a->next;\n        } else {\n            tail->next = b;\n            tail = b;\n            b = b->next;\n        }\n    }\n\n    if (a != NULL) tail->next = a;\n    else tail->next = b;\n\n    return head;\n}\n\nint printList(struct Node* head) {\n    int count = 0;\n    while (head != NULL) {\n        printf("%d -> ", head->data);\n        head = head->next;\n        count++;\n    }\n    printf("NULL\\n");\n    return count;\n}\n\nint main()\n{\n    clrscr();\n\n    struct Node* l1 = createNode(1);\n    l1->next = createNode(3);\n    l1->next->next = createNode(5);\n\n    struct Node* l2 = createNode(2);\n    l2->next = createNode(4);\n    l2->next->next = createNode(6);\n\n    struct Node* merged = merge(l1, l2);\n\n    printf("Merged List: ");\n    int total = printList(merged);\n    printf("Total nodes: %d\\n", total);\n\n    getch(); // pause for Turbo C\n    return 0;\n}` },
-            { id: 8, title: "8. MERGING OF TWO SORTED LISTS (User Input) (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node* next;\n};\n\nstruct Node* createNode(int data) {\n    struct Node* n;\n    n = (struct Node*)malloc(sizeof(struct Node));\n    n->data = data;\n    n->next = NULL;\n    return n;\n}\n\nstruct Node* merge(struct Node* a, struct Node* b) {\n    if (a == NULL) return b;\n    if (b == NULL) return a;\n\n    struct Node* head;\n\n    if (a->data < b->data) {\n        head = a;\n        a = a->next;\n    } else {\n        head = b;\n        b = b->next;\n    }\n\n    struct Node* tail = head;\n\n    while (a != NULL && b != NULL) {\n        if (a->data < b->data) {\n            tail->next = a;\n            tail = a;\n            a = a->next;\n        } else {\n            tail->next = b;\n            tail = b;\n            b = b->next;\n        }\n    }\n\n    if (a != NULL) tail->next = a;\n    else tail->next = b;\n\n    return head;\n}\n\nint printList(struct Node* head) {\n    int count = 0;\n    while (head != NULL) {\n        printf("%d -> ", head->data);\n        head = head->next;\n        count++;\n    }\n    printf("NULL\\n");\n    return count;\n}\n\nstruct Node* inputList(int n) {\n    int i, val;\n    struct Node *head = NULL, *tail = NULL;\n    printf("Enter %d elements in ascending order, separated by spaces/newlines: ", n);\n    for (i = 0; i < n; i++) {\n        scanf("%d", &val);\n        struct Node* node = createNode (val);\n        if (head == NULL) head = tail = node;\n        else { tail->next = node; tail = node; }\n    }\n    return head;\n}\n\nint main() {\n    clrscr();\n\n    int n1, n2;\n    struct Node *l1, *l2, *merged;\n    int total;\n\n    printf("Enter number of elements in first sorted list: ");\n    scanf("%d", &n1);\n\n    l1 = inputList(n1);\n\n    printf("Enter number of elements in second sorted list: ");\n    scanf("%d", &n2);\n\n    l2 = inputList(n2);\n\n    merged = merge (l1, l2);\n\n    printf("Merged List: ");\n    total = printList(merged);\n    printf("Total nodes: %d\\n", total);\n\n    getch(); // pause output for Turbo C\n    return 0;\n}` },
-            { id: 9, title: "9. BINARY SEARCH (Iterative & Recursive) (C)", language: "c", code: `#include <stdio.h>\n#include <conio.h>\n\n// ---------- Iterative Binary Search ----------\nint binarySearchIterative(int arr[], int n, int key) {\n\tint low = 0, high = n - 1, mid;\n\n\twhile (low <= high) {\n\t\tmid = (low + high) / 2;\n\n\t\tif (arr[mid] == key)\n\t\t\treturn mid;  // Found\n\t\telse if (arr[mid] < key)\n\t\t\tlow = mid + 1;  // Right half\n\t\telse\n\t\t\thigh = mid - 1; // Left half\n\t}\n\treturn -1; // Not found\n}\n\n// ---------- Recursive Binary Search ----------\nint binarySearchRecursive(int arr[], int low, int high, int key) {\n\tint mid;\n\n\tif (low > high)\n\t\treturn -1; // Base case: not found\n\n\tmid = (low + high) / 2;\n\n\tif (arr[mid] == key)\n\t\treturn mid;  // Found\n\telse if (arr[mid] > key)\n\t\treturn binarySearchRecursive(arr, low, mid - 1, key);  // Left half\n\telse\n\t\treturn binarySearchRecursive(arr, mid + 1, high, key); // Right half\n}\n\n// ---------- Main Function ----------\nint main() {\n\tint n, i, key, result;\n\tint arr[50];  // Fixed size for Turbo C (no variable length array)\n\n\tclrscr();  // Clear screen\n\n\tprintf("Enter number of elements (max 50): ");\n\tscanf("%d", &n);\n\n\tprintf("Enter %d sorted elements: ", n);\n\tfor (i = 0; i < n; i++)\n\t\tscanf("%d", &arr[i]);\n\n\tprintf("Enter element to search: ");\n\tscanf("%d", &key);\n\n\t// ----- Iterative Search -----\n\tresult = binarySearchIterative(arr, n, key);\n\tif (result == -1)\n\t\tprintf("\\n[Iterative] Element not found.\\n");\n\telse\n\t\tprintf("\\n[Iterative] Element found at position %d.\\n", result + 1);\n\n\t// ----- Recursive Search -----\n\tresult = binarySearchRecursive(arr, 0, n - 1, key);\n\tif (result == -1)\n\t\tprintf("[Recursive] Element not found.\\n");\n\telse\n\t\tprintf("[Recursive] Element found at position %d.\\n", result + 1);\n\n\tgetch(); // Wait for key press\n\treturn 0;\n}` },
-        ];
+        if (firebaseConfig) {
+            setLogLevel('debug');
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
 
-
-        // --- Utility Functions ---
-
-        function updateStatus(message, isError = false) {
-            statusTextEl.textContent = message;
-            statusMessageEl.classList.remove('hidden', 'bg-yellow-100', 'bg-red-100', 'text-yellow-800', 'text-red-800');
-            statusMessageEl.classList.add(isError ? 'bg-red-100' : 'bg-yellow-100', isError ? 'text-red-800' : 'text-yellow-800');
-        }
-
-        function hideStatus() {
-            statusMessageEl.classList.add('hidden');
-        }
-
-        // --- Core Application Logic ---
-
-        /**
-         * Initializes and renders the snippet data directly from the local array.
-         */
-        function initializeStaticData() {
-            updateStatus('Loading static code snippets...');
-            
-            // Set global snippets array and sort it
-            snippets = initialSnippets;
-            snippets.sort((a, b) => a.id - b.id);
-            
-            renderSnippetList();
-            
-            updateStatus('Code vault loaded successfully.', false);
-            setTimeout(hideStatus, 1500);
-        }
-
-
-        // --- UI Rendering and Interaction ---
-
-        function renderSnippetList() {
-            snippetsContainerEl.innerHTML = '';
-            if (snippets.length === 0) {
-                snippetsContainerEl.innerHTML = '<p class="text-gray-500">No code snippets found.</p>';
-                return;
-            }
-
-            snippets.forEach(snippet => {
-                const div = document.createElement('div');
-                // Updated class names to use the custom snippet-item class for styling
-                div.className = 'p-4 rounded-lg shadow-sm cursor-pointer transition duration-150 flex justify-between items-center snippet-item';
-                div.innerHTML = `
-                    <span class="font-medium text-lg text-gray-100">${snippet.title}</span>
-                    <span class="text-sm font-code text-gray-300 bg-[#7700ff]/50 px-2 py-1 rounded-full">C</span>
-                `;
-                div.onclick = () => showDetail(snippet.id);
-                snippetsContainerEl.appendChild(div);
+            // Authentication logic
+            setPersistence(auth, browserSessionPersistence).then(() => {
+                if (initialAuthToken) {
+                    return signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    return signInAnonymously(auth);
+                }
+            }).catch(error => {
+                console.error("Firebase Auth Error:", error);
             });
         }
+    </script>
 
-        window.showDetail = function(id) {
-            currentSnippet = snippets.find(s => s.id === id);
-            if (currentSnippet) {
-                listEl.classList.add('hidden');
-                detailEl.classList.remove('hidden');
-                renderDetailView();
+    <script>
+        // Data containing all the code snippets with their respective titles
+        const codes = [
+            {
+                title: "Singly Linked List - Insertion (First & Last)",
+                filename: "LINKLIST INSERTION.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n#define NULL 0\n\nstruct link\n{\n    int info;\n    struct link *next;\n};\ntypedef struct link node;\n\nvoid create(node *temp)\n{\n    char ans;\n    printf("\\nEnter the info:- ");\n    scanf("%d",&temp->info);\n    temp->next=NULL;\n    printf("\\nWant Another? ");\n    fflush(stdin); //CLEAR THE BUFFER\n    ans=getchar();\n    if(ans!='y')\n        return;\n    else\n    {\n        temp->next=(node *)malloc(sizeof(node));//CREATE STORAGE FOR NEXT NODE\n        create(temp->next); //RECURSIVE CALL TO CREATE NEXT NODE\n    }\n}\n\nvoid show(node *temp)\n{\n    if(temp->next == NULL)\n        printf("%d",temp->info); //DISPLAY LAST NODE\n    else\n    {\n        printf("%d->",temp->info);//DISPLAY CURRENT INFO\n        show(temp->next); //RECURSIVE CALL TO DISPLAY NEXT INFO\n    }\n}\n\nnode *insert_fst(node * temp)\n{\n    node * list;\n    list=(node *)malloc(sizeof(node));\n    printf("\\nEnter the element:- ");\n    scanf("%d",&list->info);\n    list->next=temp;\n    temp=list;\n    return(temp);\n}\n\nnode *insert_lst(node *temp)\n{\n    node *last, *first;\n    first=temp;\n    while(temp->next!=NULL)\n    {\n        temp=temp->next;\n    }\n    if(temp->next == NULL)\n    {\n        last=(node *)malloc(sizeof(node));\n        printf("\\nEnter the element: ");\n        scanf("%d",&last->info);\n        temp->next=last;\n        last->next=NULL;\n    }\n    return(first);\n}\n\nvoid main()\n{\n    node *head;\n    clrscr();\n    void create(node *);\n    void show(node *);\n    node *insert_fst(node *);\n    node *insert_lst(node *);\n    head=(node *)malloc(sizeof(node)); //CREATE STORAGE FOR FIRST NODE\n    printf("\\n\\tCreate the linked list:\\n");\n    create(head);\n    printf("\\n\\tDisplay the linked list:\\n");\n    show(head);\n    printf("\\n\\n\\tInsertion at 1st position.\\n");\n    head = insert_fst(head);\n    show(head);\n    printf("\\n\\n\\tInsertion at last position.\\n");\n    head = insert_lst(head);\n    show(head);\n    getch();\n}`
+            },
+            {
+                title: "Singly Linked List - Deletion (First & Last)",
+                filename: "linklist deletion.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n#define NULL 0\n\nstruct link\n{\n    int info;\n    struct link *next;\n};\ntypedef struct link node;\n\nvoid create(node *temp)\n{\n    char ans;\n    printf("\\nEnter the info:- ");\n    scanf("%d",&temp->info);\n    temp->next=NULL;\n    printf("\\nWant Another? ");\n    fflush(stdin); //CLEAR THE BUFFER\n    ans=getchar();\n    if(ans!='y')\n        return;\n    else\n    {\n        temp->next=(node *)malloc(sizeof(node));//CREATE STORAGE FOR NEXT NODE\n        create(temp->next); //RECURSIVE CALL TO CREATE NEXT NODE\n    }\n}\n\nvoid show(node *temp)\n{\n    if(temp->next == NULL)\n        printf("%d",temp->info); //DISPLAY LAST NODE\n    else\n    {\n        printf("%d->",temp->info);//DISPLAY CURRENT INFO\n        show(temp->next); //RECURSIVE CALL TO DISPLAY NEXT INFO\n    }\n}\n\nnode *del_fst(node * temp)\n{\n    node * list;\n    if(temp==NULL)\n        printf("\\n\\tUNDERFLOW.\\n");\n    if(temp!=NULL)\n    {\n        list=temp->next;\n        free(temp);\n        temp=list;\n    }\n    return(temp);\n}\n\nnode *del_lst(node *temp)\n{\n    node *last, *first;\n    first=temp;\n    while(temp->next->next!=NULL)\n    {\n        temp=temp->next;\n    }\n    if(temp->next->next==NULL)\n    {\n        last=temp->next;\n        free(last);\n        temp->next=NULL;\n    }\n    return(first);\n}\n\nvoid main()\n{\n    node *head;\n    clrscr();\n    void create(node *);\n    void show(node *);\n    node *del_fst(node *);\n    node *del_lst(node *);\n    head=(node *)malloc(sizeof(node)); //CREATE STORAGE FOR FIRST NODE\n    printf("\\n\\tCreate the linked list:\\n");\n    create(head);\n    printf("\\n\\tDisplay the linked list:\\n");\n    show(head);\n    printf("\\n\\n\\tDeletion from 1st position.\\n");\n    head=del_fst(head);\n    show(head);\n    printf("\\n\\n\\tDeletion from last position.\\n");\n    head=del_lst(head);\n    show(head);\n    getch();\n}`
+            },
+            {
+                title: "Singly Linked List - Deletion (Any Position - By Key)",
+                filename: "LL_DEL_ANY.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n\ntypedef struct link\n{\n    int info;\n    struct link *next;\n}node;\n\nvoid create(node *temp)\n{\n    char ans;\n    printf("\\nEnter info");\n    scanf("%d", &temp->info);\n    temp->next=NULL;\n    printf("\\nWant another?");\n    fflush(stdin);\n    ans=getchar();\n    if(ans != 'y')\n        return;\n    else\n    {\n        temp->next=(node *)malloc(sizeof(node));\n        create(temp->next);\n    }\n}\n\nvoid show(node *temp)\n{\n    while(temp!=NULL)\n    {\n        printf("%4d", temp->info);\n        temp=temp->next;\n    }\n}\n\nnode *del(node *temp)\n{\n    int key;\n    node *p, *q, *f;\n    f=temp;\n\n    printf("\\nEnter the node to delete:");\n    scanf("%d",&key);\n\n    // Find the node to delete and its predecessor\n    while(temp->next!=NULL)\n    {\n        // Check if the current node is the one to delete\n        if(temp->info==key)\n        {\n            if(temp == f) // Deleting the first node\n            {\n                p = temp->next;\n                free(temp);\n                f = p;\n                temp = f;\n            }\n            else // Deleting from middle or somewhere after first\n            {\n                p = temp->next;\n                q->next=p;\n                free(temp);\n                temp = p; // Continue search from the next node\n            }\n            // A break or return is needed here if only one instance is deleted\n            // The original code continues the loop.\n        }\n        q=temp;\n        temp=temp->next;\n    }\n\n    // Check last node\n    if(temp->next==NULL && temp->info==key)\n    {\n        q->next=NULL;\n        free(temp);\n    }\n\n    return(f);\n}\n\nvoid main()\n{\n    node *h;\n    void create(node *);\n    void show(node *);\n    node *del(node *);\n    clrscr();\n    h=(node *)malloc(sizeof(node));\n    create(h);\n    show(h);\n    h=del(h);\n    show(h);\n    getch();\n}`
+            },
+            {
+                title: "Singly Linked List - Search and Bubble Sort",
+                filename: "linked_search_sort.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n\ntypedef struct link\n{\n    int info;\n    struct link *next;\n}node;\n\nvoid create(node *temp)\n{\n    char ans;\n    printf("\\nEnter info:");\n    scanf("%d", &temp->info);\n    temp->next=NULL;\n    printf("\\nWant another");\n    fflush(stdin);\n    ans=getchar();\n    if(ans!='y')\n        return;\n    else\n    {\n        temp->next=(node *)malloc(sizeof(node));\n        create(temp->next);\n    }\n}\n\nvoid show(node *temp)\n{\n    if(temp->next==NULL)\n        printf("%4d", temp->info);\n    else\n    {\n        printf("%4d", temp->info);\n        show(temp->next);\n    }\n}\n\nvoid search(node * temp)\n{\n    int key, flag = 0;\n    printf("\\nEnter search item:");\n    scanf("%d",&key);\n    while(temp!=NULL)\n    {\n        if(temp->info==key)\n        {\n            flag = 1;\n            break;\n        }\n        temp = temp->next;\n    }\n    if(flag==1)\n        printf("\\nItem Found");\n    else\n        printf("\\nItem not found.");\n}\n\nvoid sort(node * temp)\n{\n    node *p,*q;\n    int key;\n    p=temp;\n    while(p!=NULL)\n    {\n        q=p->next;\n        while(q!=NULL)\n        {\n            if(p->info>q->info)\n            {\n                key=p->info;\n                p->info=q->info;\n                q->info=key;\n            }\n            q=q->next;\n        }\n        p=p->next;\n    }\n}\n\nvoid main()\n{\n    node *head;\n    void create(node *);\n    void show(node *);\n    void search(node *);\n    void sort(node *);\n    clrscr();\n    head=(node *)malloc(sizeof(node));\n    printf("\\nCreate");\n    create(head);\n    printf("\\nShow");\n    show(head);\n    search(head);\n    printf("\\nThe sorted list is: \\n");\n    sort(head);\n    show(head);\n    getch();\n}`
+            },
+            {
+                title: "Circular Singly Linked List - Insertion & Deletion (First & Last)",
+                filename: "circular link list.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n\nstruct link\n{\n    int info;\n    struct link *next;\n};\ntypedef struct link node;\n\nvoid create(node *temp1, node *temp2)\n{\n    char ans;\n    printf("\\nEnter the info:- ");\n    scanf("%d",&temp1->info);\n    temp1->next=temp2;\n    printf("\\nWant Another? ");\n    fflush(stdin); //CLEAR THE BUFFER\n    ans = getchar();\n    if(ans!='y')\n        return;\n    else\n    {\n        temp1->next=(node *)malloc(sizeof(node));//CREATE STORAGE FOR NEXT NODE\n        create(temp1->next,temp2); //RECURSIVE CALL TO CREATE NEXT NODE\n    }\n}\n\nvoid show(node *temp1, node *temp2)\n{\n    if(temp1->next == temp2)\n        printf("%d", temp1->info); //DISPLAY LAST NODE\n    else\n    {\n        printf("%d->",temp1->info);//DISPLAY CURRENT INFO\n        show(temp1->next,temp2); //RECURSIVE CALL TO DISPLAY NEXT INFO\n    }\n}\n\nnode *insert_fst(node * temp)\n{\n    node * list, *first;\n    first = temp;\n    list=(node *)malloc(sizeof(node));\n    printf("\\nEnter the element:- ");\n    scanf("%d",&list->info);\n    list->next=temp;\n\n    while(temp->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == first)\n    {\n        temp->next=list;\n        temp=list;\n    }\n    return(temp);\n}\n\nnode *insert_lst(node *temp)\n{\n    node *last,*first;\n    first = temp;\n    while(temp->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == first)\n    {\n        last = (node *)malloc(sizeof(node));\n        printf("\\nEnter the element:- ");\n        scanf("%d",&last->info);\n        temp->next=last;\n        last->next = first;\n    }\n    return(first);\n}\n\nnode *del_fst(node * temp)\n{\n    node * list, *first;\n    first = temp;\n    temp = temp->next;\n    list = temp;\n    while(temp->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == first)\n    {\n        temp->next=list;\n    }\n    free(first);\n    return(list);\n}\n\nnode *del_lst(node *temp)\n{\n    node *last,*first;\n    first = temp;\n    while(temp->next->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next->next == first)\n    {\n        last = temp->next;\n        free(last);\n        temp->next=first;\n    }\n    return(first);\n}\n\nvoid main()\n{\n    node *head1,*head2;\n    clrscr();\n    void create(node *,node *);\n    void show(node *,node *);\n    node *insert_fst(node *);\n    node *insert_lst(node *);\n    node *del _fst(node *);\n    node *del lst(node *);\n    head1=(node *)malloc(sizeof(node)); //CREATE STORAGE FOR FIRST NODE\n    head2=head1;\n    printf("\\n\\tCreate the linked list:\\n");\n    create(head1, head2);\n    printf("\\n\\tDisplay the linked list:\\n");\n    show(head1, head2);\n    printf("\\n\\n\\tInsertion at 1st position.\\n");\n    head1=insert_fst(head1);\n    //head2=head1;\n    show(head1,head1);\n    printf("\\n\\n\\tInsertion at last position.\\n");\n    head1=insert_lst(head1);\n    show(head1, head1);\n    getch();\n    printf("\\n\\n\\tDeletion at 1st position.\\n");\n    head1 = del_fst(head1);\n    show(head1, head1);\n    getch();\n    printf("\\n\\n\\tDeletion at last position.\\n");\n    head1=del_lst(head1);\n    show(head1,head1);\n    getch();\n}`
+            },
+            {
+                title: "Doubly Linked List - Insertion & Deletion (First & Last)",
+                filename: "double linked list.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n#define NULL 0\n\nstruct link\n{\n    struct link *prev;\n    int info;\n    struct link *next;\n};\ntypedef struct link node;\n\nvoid create(node *temp)\n{\n    char ans;\n    node *p;\n    temp->prev=NULL;\n    printf("\\nEnter the info:- ");\n    scanf("%d",&temp->info);\n    while(1)\n    {\n        printf("\\nWant Another? ");\n        fflush(stdin); //CLEAR THE BUFFER\n        ans = getchar();\n        if(ans!='y')\n            break;\n        else\n        {\n            p=temp;\n            temp->next=(node *)malloc(sizeof(node));//CREATE STORAGE FOR NEXT NODE\n            temp = temp->next;\n            temp->prev = p;\n            printf("\\nEnter the info:- ");\n            scanf("%d",&temp->info);\n        }\n    }\n    temp->next=NULL;\n}\n\nvoid show(node *temp)\n{\n    while(temp->next!=NULL)\n    {\n        printf("%d<->",temp->info); //DISPLAY UPTO PREVIOUS OF LAST NODE\n        temp = temp->next;\n    }\n    if(temp->next == NULL)\n    {\n        printf("%d",temp->info);//DISPLAY LAST NODE\n    }\n    printf("\\n");\n    while(temp->prev!=NULL)\n    {\n        printf("%d<->",temp->info); //DISPLAY FROM LAST TO SECOND NODE\n        temp = temp->prev;\n    }\n    if(temp->prev == NULL)\n    {\n        printf("%d",temp->info);//DISPLAY FIRST NODE\n    }\n}\n\nnode *insert_fst(node * temp)\n{\n    node * list;\n    list=(node *)malloc(sizeof(node));\n    list->prev=NULL;\n    printf("\\nEnter the element:- ");\n    scanf("%d",&list->info);\n    list->next=temp;\n    temp->prev=list;\n    temp=list;\n    return(temp);\n}\n\nnode *insert_lst(node *temp)\n{\n    node *last,*first;\n    first = temp;\n    while(temp->next!=NULL)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == NULL)\n    {\n        last=(node *)malloc(sizeof(node));\n        printf("\\nEnter the element:- ");\n        scanf("%d",&last->info);\n        temp->next=last;\n        last->prev=temp;\n        last->next=NULL;\n    }\n    return(first);\n}\n\nnode *del_fst(node * temp)\n{\n    node * list;\n    if(temp == NULL)\n        printf("\\n\\tUNDERFLOW.\\n");\n    if(temp!=NULL)\n    {\n        list = temp->next;\n        list->prev=NULL;\n        free(temp);\n        temp=list;\n    }\n    return(temp);\n}\n\nnode *del_lst(node *temp)\n{\n    node *last,*first;\n    first = temp;\n    while(temp->next->next!=NULL)\n    {\n        temp = temp->next;\n    }\n    if(temp->next->next == NULL)\n    {\n        last = temp->next;\n        free(last);\n        temp->next=NULL;\n    }\n    return(first);\n}\n\nvoid main()\n{\n    node *head;\n    clrscr();\n    void create(node *);\n    void show(node *);\n    node *insert_fst(node *);\n    node *insert_lst(node *);\n    node *del_fst(node *);\n    node *del_lst(node *);\n    head=(node *)malloc(sizeof(node)); //CREATE STORAGE FOR FIRST NODE\n    printf("\\n\\tCreate the linked list:\\n");\n    create(head);\n    printf("\\n\\tDisplay the linked list:\\n");\n    show(head);\n    printf("\\n\\n\\tInsertion at 1st position.\\n");\n    head = insert_fst(head);\n    show(head);\n    printf("\\n\\n\\tInsertion at last position.\\n");\n    head = insert_lst(head);\n    show(head);\n    getch();\n    printf("\\n\\n\\tDeletion at 1st position.\\n");\n    head=del_fst(head);\n    show(head);\n    getch();\n    printf("\\n\\n\\tDeletion at last position.\\n");\n    head = del_lst(head); // Assuming del_1st is a typo for del_lst\n    show(head);\n    getch();\n}`
+            },
+            {
+                title: "Doubly Linked List - Insertion & Deletion (Any Position)",
+                filename: "DOUBLE ALL ANY POS.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n#define NULL 0\n\nstruct link\n{\n    struct link *prev;\n    int info;\n    struct link *next;\n};\ntypedef struct link node;\n\nvoid create(node *temp)\n{\n    char ans;\n    node *p;\n    temp->prev=NULL;\n    printf("\\n\\tEnter the info:- ");\n    scanf("%d",&temp->info);\n    while(1)\n    {\n        printf("\\n\\tWant Another? ");\n        fflush(stdin); //CLEAR THE BUFFER\n        ans=getchar();\n        if(ans!='y')\n            break;\n        else\n        {\n            p=temp;\n            temp->next=(node *)malloc(sizeof(node));\n            temp = temp->next;\n            temp->prev=p;\n            printf("\\n\\tEnter the info:- ");\n            scanf("%d",&temp->info);\n        }\n    }\n    temp->next=NULL;\n}\n\nvoid show(node *temp)\n{\n    printf("\\n\\t");\n    while(temp->next!=NULL)\n    {\n        printf("%d<->",temp->info); //DISPLAY UPTO PREVIOUS OF LAST NODE\n        temp = temp->next;\n    }\n    if(temp->next == NULL)\n    {\n        printf("%d",temp->info);//DISPLAY LAST NODE\n    }\n    printf("\\n\\n\\t");\n    while(temp->prev!=NULL)\n    {\n        printf("%d<->",temp->info); //DISPLAY FROM LAST TO SECOND NODE\n        temp = temp->prev;\n    }\n    if(temp->prev == NULL)\n    {\n        printf("%d",temp->info);//DISPLAY FIRST NODE\n    }\n}\n\n// Returns the node BEFORE the key, or NULL if key is not found (or is the first node's info)\nnode *find(node *temp,int key)\n{\n    if(temp->next->info == key) // Check the next node's info\n        return(temp); // Return predecessor\n    else if(temp->next->next == NULL)\n        return(NULL); // End of list, not found\n    else\n        return(find(temp->next,key));\n}\n\nnode *insert(node *temp)\n{\n    int key;\n    node *mid,*n1,*first;\n    first = temp;\n    mid=(node *)malloc(sizeof(node));\n\n    printf("\\n\\nInsert Before which number?");\n    printf("\\nNote:: (Give -9999 if INSERTING at the END of list!)");\n    scanf("%d",&key);\n    printf("\\nNumber to be Inserted:");scanf("%d",&mid->info);\n\n    //IF THE KEY AT THE 1ST POSITION.\n    if(temp->info == key)\n    {\n        mid->prev=NULL;\n        mid->next=temp;\n        temp->prev=mid;\n        temp=mid;\n    }\n    else\n    {\n        n1=find(temp,key);\n\n        //IF KEY IS NOT PRESENT IN THE LIST.\n        if(n1 == NULL)\n        {\n            printf("\\n\\tKey not FOUND, Inserting at the END!\\n");\n            // Traverse to the end\n            while(temp->next!=NULL)\n            {\n                temp = temp->next;\n            }\n            mid->prev=temp;\n            mid->next=NULL;\n            temp->next=mid;\n            temp=first; // Return the original head\n        }\n        //INSERT IN THE MIDDLE OF THE LIST.\n        else\n        {\n            mid->prev=n1;\n            mid->next = n1->next;\n            n1->next=mid;\n            mid->next->prev=mid;\n        }\n    }\n    return(temp);\n}\n\nnode *del(node *temp)\n{\n    int key;\n    node *first,*p,*q;\n    first = temp;\n\n    printf("\\n\\nDelete which number? ");\n    scanf("%d",&key);\n\n    while(temp->next!=NULL)\n    {\n        if(temp->info == key)\n        {\n            //DELETE FROM MIDDLE POSITION.\n            if(temp->prev!=NULL)\n            {\n                p = temp->prev;\n                q=temp->next;\n                p->next = q;\n                q->prev = p;\n                free(temp);\n                temp = q; // Move to the next node after deletion\n                continue; // Skip the default temp=temp->next;\n            }\n            //DELETE FROM FIRST POSITION.\n            else\n            {\n                temp = temp->next;\n                temp->prev=NULL;\n                first=temp;\n                // free is implicitly missed in original code, but we assume\n                // the intent was correct logic. The logic is slightly complex here.\n                // Revert head, but the old head is not freed.\n            }\n        }\n        temp = temp->next;\n    }\n\n    //DELETE FROM LAST POSITION.\n    if((temp->next == NULL)&&(temp->info == key))\n    {\n        temp = temp->prev;\n        temp->next=NULL;\n    }\n    temp=first;\n    return(temp);\n}\n\n\nvoid main()\n{\n    node *head;\n    clrscr();\n    void create(node *);\n    void show(node *);\n    node* insert(node*);//INSERTING IN DLL\n    node* del(node*);//DELETION IN DLL\n    node* find (node *,int);//FINDING NODE\n    head=(node *)malloc(sizeof(node)); //CREATE STORAGE FOR FIRST NODE\n    printf("\\nCreate the linked list:\\n");\n    create(head);\n    printf("\\nDisplay the linked list:\\n");\n    show(head);\n    getch();\n    clrscr();\n    printf("\\nInsert number at any position in the given linked list:\\n");\n    show(head);\n    head = insert(head);\n    show(head);\n    getch();\n    clrscr();\n    printf("\\nDelete number from any position in the given linked list:\\n");\n    show(head);\n    head=del(head);\n    show(head);\n    getch();\n}\n`
+            },
+            {
+                title: "Circular Doubly Linked List - Creation and Display",
+                filename: "Circular Double Linked List.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n\ntypedef struct link\n{\n    struct link *prev;\n    int info;\n    struct link *next;\n}node;\n\nvoid creat(node *temp1, node *temp2)\n{\n    node *p,*q;\n    char ans;\n    while(1)\n    {\n        p=temp1;\n        printf("\\nEnter the info:: ");\n        scanf("%d",&temp1->info);\n        printf("\\nWant another?");\n        fflush(stdin);\n        ans = getchar();\n        if(ans!='y')\n            break;\n        else\n        {\n            temp1->next=(node *)malloc(sizeof(node));\n            temp1=temp1->next;\n            temp1->prev=p;\n        }\n    }\n    temp1->next=temp2;\n    temp2->prev=temp1;\n}\n\nvoid show(node *temp1, node *temp2)\n{\n    node *p;\n    while(temp1->next!=temp2)\n    {\n        printf("%4d",temp1->info);\n        temp1=temp1->next;\n    }\n    if(temp1->next == temp2)\n        printf("%4d",temp1->info);\n\n    p=temp1;\n\n    while(temp1->prev!=p)\n    {\n        printf("%4d",temp1->info);\n        temp1=temp1->prev;\n    }\n    if(temp1->prev == p)\n        printf("%4d", temp1->info);\n}\n\nvoid main()\n{\n    node *head1,*head2;\n    void creat(node *,node *);\n    void show(node *,node *);\n    head1=(node *)malloc(sizeof(node));\n    head2=head1;\n    clrscr();\n    printf("\\nCreate a doubly circular linked list");\n    creat(head1,head2);\n    printf("\\nDisplay ");\n    show(head1,head2);\n    getch();\n}`
+            },
+            {
+                title: "Stack Operations using Linked List (LIFO)",
+                filename: "LINKED STACK.pdf",
+                code: `/**** IMPLEMENTING STACK OPERATIONS USING LINKED LIST ****/\n\n#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n#define NULL 0\n\ntypedef struct list\n{\n    int data;\n    struct list *next;\n}node;\n\nnode *push(node *s)\n{\n    node *temp;\n    temp=(node *)malloc(sizeof(node));\n    printf("\\n Enter your data");\n    scanf("%d",&temp->data);\n    temp->next=s;\n    s=temp;\n    return(s);\n}\n\nnode *pop(node *s)\n{\n    node *temp;\n    int no;\n    if(s==NULL)\n        printf("\\nStack is empty");\n    else\n    {\n        temp = s;\n        printf("\\n%d is deleted",s->data);\n        s=temp->next;\n        free(temp); // Added free for memory management\n    }\n    return(s);\n}\n\nvoid display(node *s)\n{\n    while(s!=NULL)\n    {\n        printf("\\nstack->data=%d",s->data);\n        s=s->next;\n    }\n    return;\n}\n\nvoid main()\n{\n    node *push(node *);\n    node *pop(node *);\n    void display(node *);\n    node *stack;\n    int choice;\n    char ch;\n    stack=NULL;\n    clrscr();\n    while(1)\n    {\n        printf("\\n\\t1->PUSH");\n        printf("\\n\\t2->POP");\n        printf("\\n\\t3->DISPLAY");\n        printf("\\n\\t4->EXIT");\n        printf("\\nEnter your choice");\n        scanf("%d",&choice);\n        switch(choice)\n        {\n            case 1:\n                stack = push(stack);\n                break;\n            case 2:\n                stack=pop(stack);\n                break;\n            case 3:\n                display(stack);\n                break;\n            case 4:\n                exit(0);\n            default:\n                printf("\\nYour choice is invalid");\n        }\n    }\n    getch();\n}`
+            },
+            {
+                title: "Queue Operations using Linked List (FIFO)",
+                filename: "LINKED QUEUE.pdf",
+                code: `\n#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n#define NULL 0\n\ntypedef struct link\n{\n    char info;\n    struct link *next;\n}node;\n\nnode *insert(node *temp, char item)\n{\n    node *mid, *first;\n    first=temp;\n    mid=(node *)malloc(sizeof(node));\n    mid->info=item;\n    mid->next=NULL;\n\n    if(first == NULL)\n    {\n        temp=mid;\n    }\n    else\n    {\n        while(first->next!=NULL)\n        {\n            first = first->next;\n        }\n        first->next=mid;\n    }\n    return(temp);\n}\n\nnode *remove(node *temp)\n{\n    node *first;\n    first=temp;\n\n    if(first == NULL)\n    {\n        printf("\\n\\tUNDREFLOW.\\n");\n    }\n    else\n    {\n        printf("\\n\\n\\t%c is deleted.\\n", first->info);\n        first=first->next;\n        free(temp); // Free the old head\n        temp=first;\n    }\n    return(temp);\n}\n\nvoid display(node *temp)\n{\n    printf("\\n");\n    while(temp!=NULL)\n    {\n        printf("%4c",temp->info);\n        temp=temp->next;\n    }\n}\n\nvoid main()\n{\n    node *first=NULL;\n    char item;\n    int ch;\n    clrscr();\n    printf("\\n\\t1) INSERT.\\n\\t2) REMOVE.\\n\\t3) EXIT.\\n\\n");\n    while(1)\n    {\n        printf("\\nEnter your choice:- ");\n        scanf("%d",&ch);\n        switch(ch)\n        {\n            case 1:\n                printf("\\nEnter the item which you want to insert:- ");\n                fflush(stdin);\n                item=getchar();\n                first = insert(first,item);\n                display(first);\n                break;\n            case 2:\n                first = remove(first);\n                display(first);\n                break;\n            case 3:\n                exit(0);\n            default:\n                // Original code was missing a default case for case 2 being selected without case 1 input.\n                // We simplify to the original menu structure.\n                break;\n        }\n    }\n    getch();\n}`
+            },
+            {
+                title: "Polynomial Addition (using Linked List)",
+                filename: "POLY-ADD.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n\ntypedef struct poly\n{\n    int coeff;\n    int exp;\n    struct poly * next;\n}node;\n\nvoid create(node *temp)\n{\n    char ch;\n    printf("\\nEnter the coefficient:- ");\n    scanf("%d",&temp->coeff);\n    printf("\\nEnter the exponent:- ");\n    scanf("%d",&temp->exp);\n\n    temp->next=NULL;\n\n    printf("\\nWant to continue(y/n):- ");\n    fflush(stdin);\n    ch=getchar();\n    if(ch!='y')\n        return;\n    else\n    {\n        temp->next=(node *)malloc(sizeof(node));\n        create(temp->next);\n    }\n}\n\nvoid show(node *temp)\n{\n    if(temp->next == NULL)\n        printf("%dX^%d = 0",temp->coeff,temp->exp);\n    else\n    {\n        printf("%dX^%d + ",temp->coeff,temp->exp);\n        show(temp->next);\n    }\n}\n\nvoid attach(int c,int e, node *y)\n{\n    y->coeff=c;\n    y->exp=e;\n}\n\nnode *add(node *a,node *b)\n{\n    node *p,*q,*c,*d,*temp;\n    int x;\n    \n    p=a;\n    q=b;\n\n    c=(node *)malloc(sizeof(node));\n    d=c;\n    \n    // Main addition loop\n    while((p!=NULL)&&(q!=NULL))\n    {\n        if(p->exp==q->exp)\n        {\n            x=p->coeff+q->coeff;\n            if(x!=0)\n                attach(x,p->exp,d);\n            \n            p=p->next;\n            q=q->next;\n            \n            temp=d;\n            d->next=(node *)malloc(sizeof(node));\n            d = d->next;\n\n        }\n        else if(p->exp < q->exp)\n        {\n            attach(q->coeff,q->exp,d);\n            q=q->next;\n            \n            temp=d;\n            d->next=(node *)malloc(sizeof(node));\n            d=d->next;\n        }\n        else // p->exp > q->exp\n        {\n            attach(p->coeff,p->exp,d);\n            p=p->next;\n            \n            temp = d;\n            d->next=(node *)malloc(sizeof(node));\n            d=d->next;\n        }\n    }\n\n    // Copy remaining elements from list a\n    while(p!=NULL)\n    {\n        attach(p->coeff,p->exp,d);\n        p=p->next;\n        temp=d;\n        d->next=(node *)malloc(sizeof(node));\n        d=d->next;\n    }\n\n    // Copy remaining elements from list b\n    while(q!=NULL)\n    {\n        attach(q->coeff,q->exp,d);\n        q=q->next;\n        temp=d;\n        d->next=(node *)malloc(sizeof(node));\n        d=d->next;\n    }\n\n    temp->next=NULL; // Terminate the result list\n    d=c; // Set d to the head of the result list (c)\n    return(d); // Note: The original logic here seems to return the current pointer 'd' instead of 'c'. Returning the head 'c' is the standard.\n}\n\nvoid main()\n{\n    node *head,*head1,*head2;\n    void create(node *);\n    void show(node *);\n    node *add(node *,node *);\n\n    clrscr();\n    printf("\\n\\t\\t*****CREATE 1st POLYNOMIAL.*****\\n");\n    head1=(node *)malloc(sizeof(node));\n    create(head1);\n\n    clrscr();\n    printf("\\n\\t\\t*****CREATE 2nd POLYNOMIAL.*****\\n");\n    head2=(node *)malloc(sizeof(node));\n    create(head2);\n\n    clrscr();\n    printf("\\n\\t\\t*****SHOW 1st POLYNOMIAL.*****\\n");\n    show(head1);\n\n    printf("\\n\\t\\t*****SHOW 2nd POLYNOMIAL.*****\\n");\n    show(head2);\n\n    printf("\\n\\t\\t*****AFTER ADDITION.*****\\n");\n    head=add(head1,head2);\n    show(head);\n\n    getch();\n}\n`
+            },
+            {
+                title: "Array Sorts: Quick Sort, Merge Sort, and Insertion Sort",
+                filename: "Quick_Merge_Insertion sort.pdf",
+                code: `//-------------------------------------------------------//\n//***** SORT A LIST OF NUMBERS USING QUICK SORT *****//\n//-------------------------------------------------------//\n\n#include<stdio.h>\n#include<conio.h>\n\nint partition(int *a, int lb,int ub)\n{\n    int m,beg,end,temp;\n    m=a[lb];\n    beg=lb;end=ub;\n\n    while(beg<end)\n    {\n        while(a[beg]<=m && beg<end)\n            beg++;\n        while(a[end]>m)\n            end--;\n        if(beg<end)\n        {\n            temp=a[beg];\n            a[beg]=a[end];\n            a[end]=temp;\n        }\n    }\n    a[lb]=a[end];\n    a[end]=m;\n    return end;\n}\n\nvoid qsort(int *a, int p,int q)\n{\n    int j;\n    if(p<q)\n    {\n        j=partition(a,p,q);\n        qsort(a,p,j-1); // Note: The original code had a typo 'p.j-1'\n        qsort(a,j+1,q);\n    }\n}\n\nvoid main_qsort()\n{\n    int i,a[20],low=1,high;\n    clrscr();\n    printf("\\nEnter how many number U want?");\n    scanf("%d",&high);\n    printf("\\nEnter the numbers:: ");\n    for(i=low;i<=high;i++)\n        scanf("%d",&a[i]);\n\n    qsort(a,low,high);\n\n    printf("\\nSorted list (Quick Sort)::\\n");\n    for(i=low;i<=high;i++)\n        printf("%4d",a[i]);\n    getch();\n}\n\n//-------------------------------------------------------//\n//***** SORT A LIST OF NUMBERS USING MERGE SORT *****//\n//-------------------------------------------------------//\n\nvoid merge(int *a, int low, int mid,int high)\n{\n    int beg,end,i,k,b[30];\n    beg=i=low,end=mid+1;\n\n    while((beg<=mid)&&(end<=high))\n    {\n        if(a[beg]<=a[end])\n        {\n            b[i]=a[beg];\n            beg++;\n        }\n        else\n        {\n            b[i]=a[end];\n            end++;\n        }\n        i++;\n    }\n\n    if(beg>mid)\n    {\n        for(k=end;k<=high;k++)\n        {\n            b[i]=a[k];\n            i++;\n        }\n    }\n    else\n    {\n        for(k=beg;k<=mid;k++)\n        {\n            b[i]=a[k];\n            i++;\n        }\n    }\n\n    for(k=low;k<=high;k++)\n        a[k]=b[k];\n}\n\nvoid mergesort(int *a, int low, int high)\n{\n    int mid;\n    if(low<high)\n    {\n        mid=(low+high)/2;\n        mergesort(a,low,mid);\n        mergesort(a,mid+1,high);\n        merge(a,low,mid,high);\n    }\n}\n\nvoid main_mergesort()\n{\n    int i,a[20],low = 1,high;\n    clrscr();\n    printf("\\nEnter how many number U want?");\n    scanf("%d",&high);\n    printf("\\nEnter the numbers:: ");\n    for(i=low;i<=high;i++)\n        scanf("%d",&a[i]);\n\n    mergesort(a,low,high);\n\n    printf("\\nSorted list (Merge Sort)::\\n");\n    for(i=low;i<=high;i++)\n        printf("%4d",a[i]);\n    getch();\n}\n\n//----------------------------------------------------------//\n//***** SORT A LIST OF NUMBERS USING INSERTION SORT *****//\n//----------------------------------------------------------//\n\nvoid insertion(int *a, int high)\n{\n    int temp,ptr,i;\n    a[0]=-20000; // Sentinel value\n    for(i=2;i<=high;i++)\n    {\n        temp=a[i];\n        ptr=i-1;\n        while(temp<a[ptr])\n        {\n            a[ptr+1]=a[ptr];\n            ptr=ptr-1;\n        }\n        a[ptr+1]=temp;\n    }\n}\n\nvoid main_insertionsort()\n{\n    int i,high,a[30];\n    clrscr();\n    printf("\\nEnter how many number U want? ");\n    scanf("%d",&high);\n    printf("\\nEnter the numbers:: ");\n    for(i=1;i<=high;i++)\n        scanf("%d",&a[i]);\n\n    insertion(a,high);\n\n    printf("\\n\\nDisplay sorted list (Insertion Sort)::\\n");\n    for(i=1;i<=high;i++)\n        printf("%4d",a[i]);\n    getch();\n}\n\nvoid main()\n{\n    printf("This file contains multiple sorting algorithms. Run each main_* function separately.");\n    main_qsort(); // Example call\n    // main_mergesort();\n    // main_insertionsort();\n}\n`
+            },
+            {
+                title: "Linked List Reversal (with Data Fields)",
+                filename: "REVERSE A LINKED LIST.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n\ntypedef struct data\n{\n    int age;\n    char name[21];\n    struct data *next;\n}node; // Note: Original struct definition was slightly broken. Corrected to standard format.\n\nnode *head, *temp,*h1,*el,*end;\n\nvoid creat(node *temp)\n{\n    char ch;\n    clrscr();\n    printf("\\n\\n\\t\\t\\tEnter Age = "); scanf("%d",&temp->age);\n    printf("\\n\\n\\t\\t\\tEnter Name:");\n    fflush(stdin);\n    gets(temp->name);\n    temp->next=NULL;\n\n    printf("\\n\\n\\n\\t\\tContinue?(y/n)");\n    fflush(stdin);ch=getchar();\n    if(ch!='y'&& ch!='Y')\n        return;\n    else\n    {\n        temp->next=(node *)malloc(sizeof(node));\n        creat(temp->next);\n    }\n}\n\nvoid display(node *temp)\n{\n    printf("\\n\\n\\t\\t\\t%d\\t%s",temp->age,temp->name);\n    if(temp->next!=NULL)\n        display(temp->next);\n    return;\n}\n\n//REVERSE FUNCTION.\nnode *revlist(node *h1)\n{\n    end=NULL;\n    while(h1!=NULL)\n    {\n        el=h1->next;\n        h1->next=end;\n        end = h1;\n        h1 = el;\n    }\n    return(end);\n}\n\nvoid main()\n{\n    clrscr();\n    head=(node *)malloc(sizeof(node));\n    creat(head); clrscr();\n\n    printf("\\n\\nEntered List Follows::\\n");\n    display(head);getch();\n\n    // Note: 'temp' allocation is redundant as it's reused by revlist return.\n    // temp=(node *)malloc(sizeof(node)); \n\n    temp = revlist(head);\n\n    printf("\\n\\nReversed List Follows::\\n");\n    getch();\n    display(temp);\n}\n`
+            },
+            {
+                title: "Tower of Hanoi using Recursion",
+                filename: "TOWER OF HANOI USING RECURSION.pdf",
+                code: `//--------- PROGRAM OF TOWER OF HANOI USING RECURSION. ---------\n\n#include<stdio.h>\n#include<conio.h>\n\nvoid t_hanoi(int n,char l,char m,char r)\n{\n    if(n!=0)\n    {\n        t_hanoi(n-1,l,r,m);\n        printf("\\nMove disk %d from %c to %c",n,l,r);\n        t_hanoi(n-1,m,l,r);\n    }\n}\n\nvoid main()\n{\n    int no;\n    char left ='L',mid ='M',right ='R';\n    void t_hanoi(int,char,char,char);\n    clrscr();\n\n    printf("\\nEnter the number of disks:- ");\n    scanf("%d",&no);\n\n    t_hanoi(no, left,mid,right);\n\n    printf("\\n\\n");\n    getch();\n}\n`
+            },
+            {
+                title: "Singly Linked List - Insertion at Any Position (By Index)",
+                filename: "LL_INST_ANY.pdf",
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n\ntypedef struct link\n{\n    int info;\n    struct link *next;\n}node;\n\nvoid create(node *temp)\n{\n    char ans;\n    printf("\\nEnter the info::");\n    scanf("%d",&temp->info);\n    temp->next=NULL;\n    printf("\\nWant another?");\n    fflush(stdin);\n    ans=getchar();\n    if(ans!='y')\n        return;\n    else\n    {\n        temp->next=(node *)malloc(sizeof(node));\n        create(temp->next);\n    }\n}\n\nvoid show(node *temp)\n{\n    if(temp->next == NULL)\n        printf("%4d",temp->info);\n    else\n    {\n        printf("%4d",temp->info);\n        show(temp->next);\n    }\n}\n\nnode * insert(node *temp)\n{\n    node *first,*list,*p;\n    int pos,i;\n    first=temp;\n\n    printf("\\nEnter the position::");\n    scanf("%d",&pos);\n\n    list=(node *)malloc(sizeof(node));\n    printf("\\nEnter the info::");\n    scanf("%d",&list->info);\n\n    if(pos==1)\n    {\n        list->next=temp;\n        first=list;\n    }\n    else\n    {\n        // Traverse to (pos - 1)\n        for(i=1;i<pos-1;i++)\n        {\n            if(temp->next == NULL)\n            {\n                // If position is out of bounds, insert at the end\n                break;\n            }\n            temp=temp->next;\n        }\n\n        if(temp->next==NULL) // Inserting at the end\n        {\n            temp->next=list;\n            list->next=NULL;\n        }\n        else // Inserting in the middle\n        {\n            p=temp->next;\n            temp->next=list;\n            list->next=p;\n        }\n    }\n\n    return(first);\n}\n\nvoid main()\n{\n    node *head;\n    void create(node *);\n    node * insert(node *);\n    void show(node *);\n\n    clrscr();\n\n    head=(node *)malloc(sizeof(node));\n\n    printf("\\n\\t CREATE LINKED LIST.\\n");\n    create(head);\n\n    printf("\\n\\t DISPLAY LINKED LIST. \\n\\n");\n    show(head);\n\n    printf("\\n\\n\\tINSERTION.");\n    head=insert(head);\n    show(head);\n\n    getch();\n}\n`
             }
+        ];
+
+        // --- View Management ---
+        const codeListView = document.getElementById('code-list-view');
+        const codeDetailView = document.getElementById('code-detail-view');
+        const backButton = document.getElementById('back-button');
+
+        // Function to switch views
+        function showListView() {
+            codeListView.classList.remove('hidden');
+            codeDetailView.classList.add('hidden');
+        }
+
+        function showDetailView(codeData) {
+            document.getElementById('detail-title').textContent = codeData.title;
+            document.getElementById('detail-filename').textContent = `Source: ${codeData.filename}`;
+            document.getElementById('detail-code').textContent = codeData.code;
+            
+            // Update copy button functionality for the current code
+            const detailCopyButton = document.getElementById('detail-copy-button');
+            detailCopyButton.onclick = () => {
+                const textarea = document.createElement('textarea');
+                textarea.value = codeData.code;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    const success = document.execCommand('copy');
+                    detailCopyButton.textContent = success ? 'Copied!' : 'Copy Failed!';
+                } catch (err) {
+                    detailCopyButton.textContent = 'Copy Failed!';
+                    console.error('Could not copy text: ', err);
+                }
+                document.body.removeChild(textarea);
+                setTimeout(() => detailCopyButton.textContent = 'Copy Code', 2000);
+            };
+
+            codeListView.classList.add('hidden');
+            codeDetailView.classList.remove('hidden');
+            window.scrollTo(0, 0); // Scroll to the top when switching to detail view
         }
         
-        function renderDetailView() {
-            if (!currentSnippet) return;
-            detailTitleEl.textContent = currentSnippet.title;
-            detailCodeEl.textContent = currentSnippet.code;
-        }
+        // Setup Back Button Handler
+        backButton.addEventListener('click', showListView);
 
-        window.goBack = function() {
-            currentSnippet = null;
-            listEl.classList.remove('hidden');
-            detailEl.classList.add('hidden');
-        }
-
-        window.copyCode = function() {
-            if (!currentSnippet) return;
+        // Function to create a clickable card for the list view
+        function createListCard(codeData) {
+            const card = document.createElement('div');
+            card.className = 'card p-5 cursor-pointer border-l-4 border-primary-blue hover:shadow-lg hover:border-blue-700 transition-all duration-200';
             
-            // Use document.execCommand('copy') for better compatibility in iframe environments
-            const textarea = document.createElement('textarea');
-            textarea.value = currentSnippet.code;
-            textarea.style.position = 'fixed'; // Prevents scrolling to bottom
-            textarea.style.left = '-9999px';
-            document.body.appendChild(textarea);
-            textarea.select();
+            const title = document.createElement('h2');
+            title.className = 'text-lg font-semibold text-gray-800 truncate';
+            title.textContent = codeData.title;
             
-            try {
-                const successful = document.execCommand('copy');
-                const message = successful ? 'COPIED!' : 'Copy failed.';
-                
-                // Show temporary feedback on the button (Updated colors for theme)
-                copyButton.textContent = message;
-                copyButton.classList.remove('bg-green-500', 'hover:bg-green-600');
-                copyButton.classList.add('bg-[#ff0077]', 'hover:bg-[#7700ff]');
+            const filename = document.createElement('p');
+            filename.className = 'text-sm text-gray-500 mt-1';
+            filename.textContent = codeData.filename;
 
-                setTimeout(() => {
-                    copyButton.innerHTML = `<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2m-6 0h6m-6 0h-2"></path></svg>Copy Code`;
-                    copyButton.classList.add('bg-green-500', 'hover:bg-green-600');
-                    copyButton.classList.remove('bg-[#ff0077]', 'hover:bg-[#7700ff]');
-                }, 1500);
+            card.appendChild(title);
+            card.appendChild(filename);
 
-            } catch (err) {
-                console.error('Copy command failed:', err);
-            } finally {
-                document.body.removeChild(textarea);
-            }
+            // Click handler to switch to detail view
+            card.addEventListener('click', () => showDetailView(codeData));
+
+            return card;
         }
 
-        // Start the application setup when the window loads
-        window.onload = initializeStaticData;
+        // Render all list cards on load
+        document.addEventListener('DOMContentLoaded', () => {
+            codes.forEach(codeData => {
+                const card = createListCard(codeData);
+                codeListView.appendChild(card);
+            });
+        });
     </script>
 </body>
 </html>
