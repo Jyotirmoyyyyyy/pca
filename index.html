@@ -14,10 +14,11 @@
                         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
                     },
                     colors: {
-                        'primary-blue': '#2563eb', // Vibrant Blue
-                        'secondary-gray': '#e5e7eb', // Light body background
-                        'code-bg': '#f7f9fc', // Very Light Code Background (for readability)
-                        'code-text': '#1f2937', // Dark Code Text
+                        // Neon/RGB Palette
+                        'neon-cyan': '#00FFFF',
+                        'bg-dark': '#0f172a', // Slate-900 equivalent for dark theme
+                        'code-bg-dark': '#1e293b', // Slightly lighter dark for code area
+                        'text-light': '#f8fafc', // White/Light Gray text
                     }
                 }
             }
@@ -26,26 +27,46 @@
     <style>
         /* Shared Styles */
         .card {
-            background-color: white;
+            background-color: var(--code-bg-dark);
             border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2); /* Subtle neon glow */
             transition: all 0.3s ease;
+            border: 1px solid rgba(0, 255, 255, 0.4);
         }
         .code-container {
-            border: 1px solid #d1d5db;
-            background-color: var(--code-bg);
+            border: 1px solid var(--neon-cyan);
+            background-color: #000000; /* Pure black for maximum contrast */
             border-radius: 0.5rem;
             padding: 1rem;
+            box-shadow: inset 0 0 8px rgba(0, 255, 255, 0.4); /* Inner code glow */
         }
         pre {
             white-space: pre-wrap;
             word-wrap: break-word;
             line-height: 1.4;
             font-size: 0.95rem; 
+            color: var(--neon-cyan); /* Neon text color for code */
         }
-        .code-block::-webkit-scrollbar { height: 8px; }
-        .code-block::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 4px; }
-        .code-block::-webkit-scrollbar-track { background-color: #f3f4f6; }
+        
+        /* Neon Button Style */
+        .neon-button {
+            background-color: #000000;
+            color: var(--neon-cyan);
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.6), inset 0 0 5px rgba(0, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        .neon-button:hover {
+            background-color: var(--neon-cyan);
+            color: var(--bg-dark); /* Dark text on hover */
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        }
+
+        /* List Item Glow */
+        .list-card-glow:hover {
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+            border-color: var(--neon-cyan);
+        }
 
         /* Detail View Specific Style */
         #code-detail {
@@ -54,14 +75,14 @@
         }
     </style>
 </head>
-<body class="bg-secondary-gray min-h-screen">
+<body class="bg-bg-dark min-h-screen text-text-light">
 
     <div id="app" class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <header class="text-center mb-12 p-6 bg-white rounded-xl shadow-lg border-b-4 border-primary-blue">
-            <h1 class="text-4xl font-extrabold text-gray-800 sm:text-5xl">
+        <header class="text-center mb-12 p-6 card border-b-4 border-neon-cyan">
+            <h1 class="text-4xl font-extrabold text-text-light sm:text-5xl">
                 Data Structures C Code Repository
             </h1>
-            <p class="mt-4 text-xl text-gray-600">
+            <p class="mt-4 text-xl text-neon-cyan">
                 Linked Lists, Stacks, and Queues - Accessible Anywhere
             </p>
         </header>
@@ -73,18 +94,18 @@
 
         <!-- Code Detail View -->
         <div id="code-detail-view" class="hidden">
-            <button id="back-button" class="flex items-center text-primary-blue hover:text-blue-700 font-semibold mb-6 transition-colors">
+            <button id="back-button" class="flex items-center text-neon-cyan hover:text-text-light font-semibold mb-6 transition-colors">
                 <!-- Icon from lucide-react equivalent: ChevronLeft -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-1"><path d="m15 18-6-6 6-6"/></svg>
                 Back to All Codes
             </button>
             <div id="code-detail" class="card p-6">
-                <h2 id="detail-title" class="text-3xl font-bold text-gray-800 mb-2"></h2>
-                <p id="detail-filename" class="text-sm text-gray-500 mb-6"></p>
+                <h2 id="detail-title" class="text-3xl font-bold text-text-light mb-2"></h2>
+                <p id="detail-filename" class="text-sm text-gray-400 mb-6"></p>
                 <div id="detail-code-container" class="code-container">
-                    <pre id="detail-code" class="text-base text-code-text overflow-x-auto code-block font-mono"></pre>
+                    <pre id="detail-code" class="text-base text-neon-cyan overflow-x-auto code-block font-mono"></pre>
                 </div>
-                <button id="detail-copy-button" class="mt-6 px-6 py-2 bg-primary-blue text-white text-base font-medium rounded-lg shadow-md hover:bg-primary-blue/80 transition-colors duration-200">
+                <button id="detail-copy-button" class="neon-button mt-6 px-6 py-2 text-base font-medium rounded-lg">
                     Copy Code
                 </button>
             </div>
@@ -150,7 +171,7 @@
             {
                 title: "Circular Singly Linked List - Insertion & Deletion (First & Last)",
                 filename: "circular link list.pdf",
-                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n\nstruct link\n{\n    int info;\n    struct link *next;\n};\ntypedef struct link node;\n\nvoid create(node *temp1, node *temp2)\n{\n    char ans;\n    printf("\\nEnter the info:- ");\n    scanf("%d",&temp1->info);\n    temp1->next=temp2;\n    printf("\\nWant Another? ");\n    fflush(stdin); //CLEAR THE BUFFER\n    ans = getchar();\n    if(ans!='y')\n        return;\n    else\n    {\n        temp1->next=(node *)malloc(sizeof(node));//CREATE STORAGE FOR NEXT NODE\n        create(temp1->next,temp2); //RECURSIVE CALL TO CREATE NEXT NODE\n    }\n}\n\nvoid show(node *temp1, node *temp2)\n{\n    if(temp1->next == temp2)\n        printf("%d", temp1->info); //DISPLAY LAST NODE\n    else\n    {\n        printf("%d->",temp1->info);//DISPLAY CURRENT INFO\n        show(temp1->next,temp2); //RECURSIVE CALL TO DISPLAY NEXT INFO\n    }\n}\n\nnode *insert_fst(node * temp)\n{\n    node * list, *first;\n    first = temp;\n    list=(node *)malloc(sizeof(node));\n    printf("\\nEnter the element:- ");\n    scanf("%d",&list->info);\n    list->next=temp;\n\n    while(temp->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == first)\n    {\n        temp->next=list;\n        temp=list;\n    }\n    return(temp);\n}\n\nnode *insert_lst(node *temp)\n{\n    node *last,*first;\n    first = temp;\n    while(temp->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == first)\n    {\n        last = (node *)malloc(sizeof(node));\n        printf("\\nEnter the element:- ");\n        scanf("%d",&last->info);\n        temp->next=last;\n        last->next = first;\n    }\n    return(first);\n}\n\nnode *del_fst(node * temp)\n{\n    node * list, *first;\n    first = temp;\n    temp = temp->next;\n    list = temp;\n    while(temp->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == first)\n    {\n        temp->next=list;\n    }\n    free(first);\n    return(list);\n}\n\nnode *del_lst(node *temp)\n{\n    node *last,*first;\n    first = temp;\n    while(temp->next->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next->next == first)\n    {\n        last = temp->next;\n        free(last);\n        temp->next=first;\n    }\n    return(first);\n}\n\nvoid main()\n{\n    node *head1,*head2;\n    clrscr();\n    void create(node *,node *);\n    void show(node *,node *);\n    node *insert_fst(node *);\n    node *insert_lst(node *);\n    node *del _fst(node *);\n    node *del lst(node *);\n    head1=(node *)malloc(sizeof(node)); //CREATE STORAGE FOR FIRST NODE\n    head2=head1;\n    printf("\\n\\tCreate the linked list:\\n");\n    create(head1, head2);\n    printf("\\n\\tDisplay the linked list:\\n");\n    show(head1, head2);\n    printf("\\n\\n\\tInsertion at 1st position.\\n");\n    head1=insert_fst(head1);\n    //head2=head1;\n    show(head1,head1);\n    printf("\\n\\n\\tInsertion at last position.\\n");\n    head1=insert_lst(head1);\n    show(head1, head1);\n    getch();\n    printf("\\n\\n\\tDeletion at 1st position.\\n");\n    head1 = del_fst(head1);\n    show(head1, head1);\n    getch();\n    printf("\\n\\n\\tDeletion at last position.\\n");\n    head1=del_lst(head1);\n    show(head1,head1);\n    getch();\n}`
+                code: `#include<stdio.h>\n#include<conio.h>\n#include<stdlib.h>\n\nstruct link\n{\n    int info;\n    struct link *next;\n};\ntypedef struct link node;\n\nvoid create(node *temp1, node *temp2)\n{\n    char ans;\n    printf("\\nEnter the info:- ");\n    scanf("%d",&temp1->info);\n    temp1->next=temp2;\n    printf("\\nWant Another? ");\n    fflush(stdin); //CLEAR THE BUFFER\n    ans = getchar();\n    if(ans!='y')\n        return;\n    else\n    {\n        temp1->next=(node *)malloc(sizeof(node));//CREATE STORAGE FOR NEXT NODE\n        create(temp1->next,temp2); //RECURSIVE CALL TO CREATE NEXT NODE\n    }\n}\n\nvoid show(node *temp1, node *temp2)\n{\n    if(temp1->next == temp2)\n        printf("%d", temp1->info);\n    else\n    {\n        printf("%d->",temp1->info);//DISPLAY CURRENT INFO\n        show(temp1->next,temp2); //RECURSIVE CALL TO DISPLAY NEXT INFO\n    }\n}\n\nnode *insert_fst(node * temp)\n{\n    node * list, *first;\n    first = temp;\n    list=(node *)malloc(sizeof(node));\n    printf("\\nEnter the element:- ");\n    scanf("%d",&list->info);\n    list->next=temp;\n\n    while(temp->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == first)\n    {\n        temp->next=list;\n        temp=list;\n    }\n    return(temp);\n}\n\nnode *insert_lst(node *temp)\n{\n    node *last,*first;\n    first = temp;\n    while(temp->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == first)\n    {\n        last = (node *)malloc(sizeof(node));\n        printf("\\nEnter the element:- ");\n        scanf("%d",&last->info);\n        temp->next=last;\n        last->next = first;\n    }\n    return(first);\n}\n\nnode *del_fst(node * temp)\n{\n    node * list, *first;\n    first = temp;\n    temp = temp->next;\n    list = temp;\n    while(temp->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next == first)\n    {\n        temp->next=list;\n    }\n    free(first);\n    return(list);\n}\n\nnode *del_lst(node *temp)\n{\n    node *last,*first;\n    first = temp;\n    while(temp->next->next!=first)\n    {\n        temp = temp->next;\n    }\n    if(temp->next->next == first)\n    {\n        last = temp->next;\n        free(last);\n        temp->next=first;\n    }\n    return(first);\n}\n\nvoid main()\n{\n    node *head1,*head2;\n    clrscr();\n    void create(node *,node *);\n    void show(node *,node *);\n    node *insert_fst(node *);\n    node *insert_lst(node *);\n    node *del _fst(node *);\n    node *del lst(node *);\n    head1=(node *)malloc(sizeof(node)); //CREATE STORAGE FOR FIRST NODE\n    head2=head1;\n    printf("\\n\\tCreate the linked list:\\n");\n    create(head1, head2);\n    printf("\\n\\tDisplay the linked list:\\n");\n    show(head1, head2);\n    printf("\\n\\n\\tInsertion at 1st position.\\n");\n    head1=insert_fst(head1);\n    //head2=head1;\n    show(head1,head1);\n    printf("\\n\\n\\tInsertion at last position.\\n");\n    head1=insert_lst(head1);\n    show(head1, head1);\n    getch();\n    printf("\\n\\n\\tDeletion at 1st position.\\n");\n    head1 = del_fst(head1);\n    show(head1, head1);\n    getch();\n    printf("\\n\\n\\tDeletion at last position.\\n");\n    head1=del_lst(head1);\n    show(head1,head1);\n    getch();\n}`
             },
             {
                 title: "Doubly Linked List - Insertion & Deletion (First & Last)",
@@ -249,14 +270,15 @@
         // Function to create a clickable card for the list view
         function createListCard(codeData) {
             const card = document.createElement('div');
-            card.className = 'card p-5 cursor-pointer border-l-4 border-primary-blue hover:shadow-lg hover:border-blue-700 transition-all duration-200';
+            // Updated class names for neon style
+            card.className = 'card p-5 cursor-pointer border-l-4 border-neon-cyan hover:shadow-2xl list-card-glow transition-all duration-200';
             
             const title = document.createElement('h2');
-            title.className = 'text-lg font-semibold text-gray-800 truncate';
+            title.className = 'text-lg font-semibold text-text-light truncate';
             title.textContent = codeData.title;
             
             const filename = document.createElement('p');
-            filename.className = 'text-sm text-gray-500 mt-1';
+            filename.className = 'text-sm text-gray-400 mt-1';
             filename.textContent = codeData.filename;
 
             card.appendChild(title);
